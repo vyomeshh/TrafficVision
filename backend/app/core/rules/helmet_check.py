@@ -206,20 +206,26 @@ def check_helmet_violation(
             # Analyse head region for helmet presence
             violation_confidence: float = _analyse_head_region(image, person_bbox)
 
-            violations.append(
-                {
-                    "type": "No Helmet",
-                    "vehicle_type": "Motorcycle",
-                    "bbox": moto_bbox,
-                    "confidence": round(violation_confidence, 4),
-                    "rider_bbox": person_bbox,
-                }
-            )
+            if violation_confidence >= 0.5:
+                violations.append(
+                    {
+                        "type": "No Helmet",
+                        "vehicle_type": "Motorcycle",
+                        "bbox": moto_bbox,
+                        "confidence": round(violation_confidence, 4),
+                        "rider_bbox": person_bbox,
+                    }
+                )
 
-            logs.append(
-                f"[HELMET CHECK] ⚠ Rider at {person_bbox} on motorcycle at "
-                f"{moto_bbox} — no helmet (conf={violation_confidence:.2f})."
-            )
+                logs.append(
+                    f"[HELMET CHECK] ⚠ Rider at {person_bbox} on motorcycle at "
+                    f"{moto_bbox} — no helmet (conf={violation_confidence:.2f})."
+                )
+            else:
+                logs.append(
+                    f"[HELMET CHECK] ✔ Rider at {person_bbox} appears to have a helmet "
+                    f"(conf={1 - violation_confidence:.2f})."
+                )
 
         if riders_found == 0:
             logs.append(

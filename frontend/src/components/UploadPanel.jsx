@@ -164,30 +164,53 @@ export default function UploadPanel({ onUpload, isProcessing, processingLogs, de
               </div>
 
               {/* Detected Violations List */}
-              {violations.length > 0 ? (
-                <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '12px', borderRadius: '8px', flexGrow: 1 }}>
-                  <h4 style={{ fontSize: '0.9rem', marginBottom: '10px', color: '#8b9bb4' }}>
-                    VIOLATIONS IN IMAGE
-                  </h4>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {violations.map((v, i) => (
-                      <li key={i} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,51,102,0.1)', padding: '10px', borderRadius: '6px', borderLeft: '3px solid #ff3366', fontSize: '0.85rem' }}>
-                        <div>
-                          <strong style={{ display: 'block', color: '#fff' }}>{v.type || v.violation_type}</strong>
-                          <span style={{ color: '#8b9bb4' }}>{v.vehicle_type || 'Unknown'}</span>
-                        </div>
-                        <div style={{ fontWeight: '600', color: '#00ff87', alignSelf: 'center' }}>
-                          {(v.confidence * 100).toFixed(1)}% Conf
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '20px', color: '#8b9bb4', flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  No violations detected in this frame.
-                </div>
-              )}
+              <div style={{ flexGrow: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {violations.length > 0 ? (
+                  <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '12px', borderRadius: '8px' }}>
+                    <h4 style={{ fontSize: '0.9rem', marginBottom: '10px', color: '#8b9bb4', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FaClipboardList /> VIOLATIONS IN IMAGE
+                    </h4>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {violations.map((v, i) => (
+                        <li key={i} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255,51,102,0.1)', padding: '10px', borderRadius: '6px', borderLeft: '3px solid #ff3366', fontSize: '0.85rem' }}>
+                          <div>
+                            <strong style={{ display: 'block', color: '#fff' }}>{v.type || v.violation_type}</strong>
+                            <span style={{ color: '#8b9bb4' }}>{v.vehicle_type || 'Unknown'}</span>
+                          </div>
+                          <div style={{ fontWeight: '600', color: '#00ff87', alignSelf: 'center' }}>
+                            {(v.confidence * 100).toFixed(1)}% Conf
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '10px', color: '#8b9bb4', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '8px' }}>
+                    No violations detected.
+                  </div>
+                )}
+
+                {/* Scanned Plates List */}
+                {r.plates_recognized && r.plates_recognized.length > 0 && (
+                  <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '12px', borderRadius: '8px' }}>
+                    <h4 style={{ fontSize: '0.9rem', marginBottom: '10px', color: '#8b9bb4', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FaSquareParking /> SCANNED PLATES
+                    </h4>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {r.plates_recognized.map((p, i) => (
+                        <li key={i} style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(0, 242, 254, 0.1)', padding: '10px', borderRadius: '6px', borderLeft: '3px solid #00f2fe', fontSize: '0.85rem' }}>
+                          <div>
+                            <strong style={{ display: 'block', color: '#fff', letterSpacing: '1px', fontFamily: 'monospace', fontSize: '1rem' }}>{p.plate_text}</strong>
+                          </div>
+                          <div style={{ fontWeight: '600', color: '#00f2fe', alignSelf: 'center' }}>
+                            {(p.confidence * 100).toFixed(1)}% Conf
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
 
           </div>

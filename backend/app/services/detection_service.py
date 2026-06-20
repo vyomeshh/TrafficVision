@@ -24,7 +24,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-YOLO_MODEL = os.getenv("YOLO_MODEL", "yolov8s.pt")
+YOLO_MODEL = os.getenv("YOLO_MODEL", "yolov8x.pt")
 YOLO_CONFIDENCE = float(os.getenv("YOLO_CONFIDENCE", "0.25"))
 STOP_LINE_RATIO = float(os.getenv("STOP_LINE_RATIO", "0.7"))
 

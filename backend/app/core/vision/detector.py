@@ -43,8 +43,8 @@ class VehicleDetector:
 
     def __init__(
         self,
-        model_path: str = "yolov8s.pt",
-        confidence_threshold: float = 0.35,
+        model_path: str = "yolov8x.pt",
+        confidence_threshold: float = 0.30,
     ) -> None:
         """Initialise the detector and load the YOLOv8 model weights.
 
