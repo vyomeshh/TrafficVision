@@ -132,11 +132,18 @@ function App() {
     }
   };
 
+  // --- Sidebar State ---
+  const [isSidebarPinned, setIsSidebarPinned] = useState(false);
+
   return (
-    <div className="app-root">
+    <div className={`app-root ${isSidebarPinned ? 'sidebar-pinned' : 'sidebar-collapsed'}`}>
       <Toaster position="top-right" />
       <Header serverOnline={serverOnline} />
-      <Sidebar />
+      <Sidebar 
+        onExportCSV={handleExportCSV} 
+        isPinned={isSidebarPinned}
+        setIsPinned={setIsSidebarPinned}
+      />
       
       <main className="main-content app-layout">
         <section id="hero-section">
