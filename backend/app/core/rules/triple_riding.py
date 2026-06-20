@@ -30,9 +30,9 @@ def _expand_bbox(
     return int(cx - half_w), int(cy - half_h), int(cx + half_w), int(cy + half_h)
 
 
-def _point_in_box(px: float, py: float, bbox: Tuple[int, int, int, int]) -> bool:
-    """Return ``True`` if point ``(px, py)`` falls inside *bbox*."""
-    return bbox[0] <= px <= bbox[2] and bbox[1] <= py <= bbox[3]
+def _bboxes_intersect(b1: List[int], b2: List[int]) -> bool:
+    """Return True if bounding boxes b1 and b2 overlap."""
+    return not (b1[0] > b2[2] or b2[0] > b1[2] or b1[1] > b2[3] or b2[1] > b1[3])
 
 
 def check_triple_riding(
@@ -88,10 +88,7 @@ def check_triple_riding(
 
         for person in persons:
             person_bbox: List[int] = person["bbox"]
-            pcx: float = (person_bbox[0] + person_bbox[2]) / 2.0
-            pcy: float = (person_bbox[1] + person_bbox[3]) / 2.0
-
-            if _point_in_box(pcx, pcy, expanded):
+            if _bboxes_intersect(person_bbox, expanded):
                 matched_persons.append(person)
 
         rider_count: int = len(matched_persons)

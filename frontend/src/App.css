@@ -1098,3 +1098,61 @@ body {
     display: none;
   }
 }
+
+/* --- 3D Flip Card Animation --- */
+.flip-container {
+  perspective: 1200px;
+  width: 100%;
+  height: 100%;
+  min-height: 450px;
+}
+.flip-container.flipped .flipper {
+  transform: rotateY(180deg);
+}
+.flipper {
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.front, .back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Ensure the background applies properly over the whole face */
+  background: rgba(10, 25, 46, 0.6);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+}
+.front {
+  transform: rotateY(0deg);
+  padding: 24px;
+}
+.back {
+  transform: rotateY(180deg);
+  overflow-y: auto;
+  padding: 24px;
+}
+/* Flip card specific scrollbar */
+.back::-webkit-scrollbar {
+  width: 6px;
+}
+.back::-webkit-scrollbar-track {
+  background: transparent;
+}
+.back::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 135, 0.3);
+  border-radius: 4px;
+}
+.back::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 135, 0.5);
+}
+

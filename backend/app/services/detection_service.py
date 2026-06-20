@@ -69,7 +69,7 @@ async def process_detection(detection_id: str, contents: bytes, filename: str) -
         processed_img,
         confidence=YOLO_CONFIDENCE,
     )
-    vehicles_detected = len(detections)
+    vehicles_detected = len([d for d in detections if d.get("class_name") != "Person"])
     log_service.add_log(detection_id, f"Detected {vehicles_detected} vehicle(s).")
 
     # 4. Violation checks

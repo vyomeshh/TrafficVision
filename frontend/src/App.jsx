@@ -4,7 +4,7 @@ import { getHealth, getViolations, getAnalytics, detectImage, exportReport } fro
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import UploadPanel from './components/UploadPanel';
-import ResultsPanel from './components/ResultsPanel';
+
 import ViolationsTable from './components/ViolationsTable';
 import AnalyticsPanel from './components/AnalyticsPanel';
 import EvidenceModal from './components/EvidenceModal';
@@ -146,7 +146,7 @@ function App() {
           detectionResult={detectionResult}
         />
 
-        <ResultsPanel detectionResult={detectionResult} />
+
 
         <ViolationsTable
           violations={violations}
