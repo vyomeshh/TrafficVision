@@ -277,7 +277,7 @@ class PlateReader:
 
         # PaddleOCR expects a BGR or greyscale numpy array
         try:
-            result = self.ocr.ocr(plate_crop, cls=True)
+            result = self.ocr.ocr(plate_crop)
         except Exception as exc:
             logger.error("PaddleOCR inference failed: %s", exc)
             return ('', 0.0)

@@ -41,7 +41,7 @@ _using_sqlite: bool = False
 _POSTGRES_SCHEMA = """
 CREATE TABLE IF NOT EXISTS violations (
     id SERIAL PRIMARY KEY,
-    detection_id VARCHAR(50) UNIQUE NOT NULL,
+    detection_id VARCHAR(50) NOT NULL,
     license_plate VARCHAR(20),
     vehicle_type VARCHAR(30),
     violation_type VARCHAR(50),
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS analytics_summary (
 _SQLITE_SCHEMA = """
 CREATE TABLE IF NOT EXISTS violations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    detection_id VARCHAR(50) UNIQUE NOT NULL,
+    detection_id VARCHAR(50) NOT NULL,
     license_plate VARCHAR(20),
     vehicle_type VARCHAR(30),
     violation_type VARCHAR(50),
