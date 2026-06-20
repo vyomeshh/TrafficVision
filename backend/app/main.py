@@ -38,8 +38,9 @@ STOP_LINE_RATIO = float(os.getenv("STOP_LINE_RATIO", "0.7"))
 # Project paths
 # ---------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
-UPLOADS_DIR = BASE_DIR / "uploads"
-RESULTS_DIR = BASE_DIR / "results"
+DATA_DIR = BASE_DIR.parent / "data"
+UPLOADS_DIR = DATA_DIR / "uploads"
+RESULTS_DIR = DATA_DIR / "results"
 
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -50,12 +51,12 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 _models_available = False
 
 try:
-    from core.vision.preprocessor import preprocess_image
-    from core.vision.detector import detect_vehicles, annotate_image
-    from core.rules.helmet_check import check_helmet_violations
-    from core.rules.triple_riding import check_triple_riding
-    from core.rules.red_light import check_red_light_violation
-    from core.ocr.plate_reader import recognize_plates
+    from app.core.vision.preprocessor import preprocess_image
+    from app.core.vision.detector import detect_vehicles, annotate_image
+    from app.core.rules.helmet_check import check_helmet_violations
+    from app.core.rules.triple_riding import check_triple_riding
+    from app.core.rules.red_light import check_red_light_violation
+    from app.core.ocr.plate_reader import recognize_plates
     _models_available = True
 except ImportError as exc:
     import traceback
@@ -91,12 +92,12 @@ except ImportError as exc:
 _db_available = False
 
 try:
-    from database.db import (
-        init_db,
-        store_violation,
+    from app.database.connection import init_db
+    from app.database.models import (
+        insert_violation as store_violation,
         get_violations,
         get_analytics,
-        get_report,
+        get_daily_counts as get_report,
     )
     _db_available = True
 except ImportError as exc:

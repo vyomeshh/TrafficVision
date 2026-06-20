@@ -20,4 +20,4 @@ echo.
 echo [SERVER] Starting FastAPI server on http://localhost:8000
 echo [SERVER] API docs available at http://localhost:8000/docs
 echo.
-uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
