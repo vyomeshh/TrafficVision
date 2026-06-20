@@ -1,0 +1,38 @@
+{
+  "detail": {
+    "success": false,
+    "detection_id": "TR-2026-D722D6",
+    "error": "Unknown argument: use_gpu",
+    "traceback": "Traceback (most recent call last):\n  File \"P:\\FlipkartGridlock\\Prototype\\backend\\app\\main.py\", line 307, in detect\n    plates = PlateReader().process(processed_img, detections)\n             ^^^^^^^^^^^^^\n  File \"P:\\FlipkartGridlock\\Prototype\\backend\\app\\core\\ocr\\plate_reader.py\", line 44, in __init__\n    self.ocr = PaddleOCR(\n               ^^^^^^^^^^\n  File \"P:\\FlipkartGridlock\\Prototype\\backend\\venv\\Lib\\site-packages\\paddleocr\\_pipelines\\ocr.py\", line 173, in __init__\n    super().__init__(**base_params)\n  File \"P:\\FlipkartGridlock\\Prototype\\backend\\venv\\Lib\\site-packages\\paddleocr\\_pipelines\\base.py\", line 63, in __init__\n    self._common_args = parse_common_args(\n                        ^^^^^^^^^^^^^^^^^^\n  File \"P:\\FlipkartGridlock\\Prototype\\backend\\venv\\Lib\\site-packages\\paddleocr\\_common_args.py\", line 54, in parse_common_args\n    raise ValueError(f\"Unknown argument: {name}\")\nValueError: Unknown argument: use_gpu\n",
+    "processing_logs": [
+      "[12:22:24.765] Reading uploaded file\u2026",
+      "[12:22:24.766] Saved upload \u2192 TR-2026-D722D6.jpg",
+      "[12:22:24.766] Pre-processing image\u2026",
+      "[PREPROCESS] Reading image from 'P:\\FlipkartGridlock\\Prototype\\data\\uploads\\TR-2026-D722D6.jpg'...",
+      "[PREPROCESS] Image loaded successfully \u2014 100\u00d7100 px, 3 channels. Done.",
+      "[PREPROCESS] Applying CLAHE enhancement...",
+      "[PREPROCESS] Applying CLAHE enhancement... Done.",
+      "[PREPROCESS] Applying Gaussian denoising (fastNlMeansDenoisingColored)...",
+      "[PREPROCESS] Applying Gaussian denoising (fastNlMeansDenoisingColored)... Done.",
+      "[PREPROCESS] Applying motion blur correction (sharpening kernel)...",
+      "[PREPROCESS] Applying motion blur correction (sharpening kernel)... Done.",
+      "[PREPROCESS] \u2714 Preprocessing pipeline complete.",
+      "[12:22:24.934] Running YOLOv8 vehicle detection\u2026",
+      "[12:22:25.141] Detected 0 vehicle(s).",
+      "[12:22:25.141] Checking for helmet violations\u2026",
+      "[HELMET CHECK] Found 0 motorcycle(s) and 0 person(s) in frame.",
+      "[HELMET CHECK] No motorcycles detected \u2014 skipping. Done.",
+      "[12:22:25.141] Checking for triple riding\u2026",
+      "[TRIPLE RIDING] Found 0 motorcycle(s) and 0 person(s) in frame.",
+      "[TRIPLE RIDING] No motorcycles detected \u2014 skipping. Done.",
+      "[12:22:25.141] Checking for red-light violations\u2026",
+      "[RED LIGHT] Stop line set at y=70 (70% of 100px height).",
+      "[RED LIGHT] Evaluating 0 vehicle detection(s)...",
+      "[RED LIGHT] \u2714 Check complete \u2014 0 violation(s) flagged. Done.",
+      "[12:22:25.141] Found 0 violation(s) (helmet=0, triple=0, red_light=0).",
+      "[12:22:25.141] Running license plate OCR\u2026",
+      "[12:22:25.142] ERROR: Unknown argument: use_gpu"
+    ],
+    "processing_time_ms": 377.64
+  }
+}
