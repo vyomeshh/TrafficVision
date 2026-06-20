@@ -8,6 +8,7 @@ import UploadPanel from './components/UploadPanel';
 import ViolationsTable from './components/ViolationsTable';
 import AnalyticsPanel from './components/AnalyticsPanel';
 import EvidenceModal from './components/EvidenceModal';
+import Sidebar from './components/Sidebar';
 import './App.css';
 
 function App() {
@@ -135,28 +136,35 @@ function App() {
     <div className="app-root">
       <Toaster position="top-right" />
       <Header serverOnline={serverOnline} />
+      <Sidebar />
       
-      <main className="main-content">
-        <HeroSection />
+      <main className="main-content app-layout">
+        <section id="hero-section">
+          <HeroSection />
+        </section>
         
-        <UploadPanel
-          onUpload={handleImageUpload}
-          isProcessing={isProcessing}
-          processingLogs={processingLogs}
-          detectionResult={detectionResult}
-        />
+        <section id="upload-panel">
+          <UploadPanel
+            onUpload={handleImageUpload}
+            isProcessing={isProcessing}
+            processingLogs={processingLogs}
+            detectionResult={detectionResult}
+          />
+        </section>
 
+        <section id="violations-table">
+          <ViolationsTable
+            violations={violations}
+            onViewEvidence={(v) => setSelectedEvidence(v)}
+          />
+        </section>
 
-
-        <ViolationsTable
-          violations={violations}
-          onViewEvidence={(v) => setSelectedEvidence(v)}
-        />
-
-        <AnalyticsPanel
-          analytics={analytics}
-          onExportCSV={handleExportCSV}
-        />
+        <section id="analytics-panel">
+          <AnalyticsPanel
+            analytics={analytics}
+            onExportCSV={handleExportCSV}
+          />
+        </section>
       </main>
 
       {selectedEvidence && (

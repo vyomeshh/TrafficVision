@@ -1,0 +1,149 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 70px; /* Below header */
+  bottom: 0;
+  width: 250px;
+  background: rgba(5, 7, 15, 0.6);
+  backdrop-filter: var(--glass-blur);
+  border-right: 1px solid var(--border-cyan);
+  padding: 30px 0;
+  z-index: 90;
+  transition: all 0.3s ease;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar-item {
+  width: 100%;
+}
+
+.sidebar-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: transparent;
+  border: none;
+  padding: 15px 30px;
+  color: var(--text-grey);
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.sidebar-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--neon-cyan);
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: var(--glow-cyan);
+}
+
+.sidebar-link:hover {
+  color: var(--text-white);
+  background: rgba(0, 242, 254, 0.05);
+}
+
+.sidebar-link.active {
+  color: var(--neon-cyan);
+  background: rgba(0, 242, 254, 0.08);
+}
+
+.sidebar-link.active::before {
+  opacity: 1;
+}
+
+.sidebar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-label {
+  white-space: nowrap;
+}
+
+/* Make main content leave space for sidebar */
+@media (min-width: 1024px) {
+  .app-layout {
+    padding-left: 250px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 60px;
+    padding: 20px 0;
+  }
+  
+  .sidebar-link {
+    padding: 15px;
+    justify-content: center;
+  }
+  
+  .sidebar-label {
+    display: none;
+  }
+  
+  .app-layout {
+    padding-left: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    height: 60px;
+    border-right: none;
+    border-top: 1px solid var(--border-cyan);
+    padding: 0;
+    z-index: 100;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0;
+  }
+  
+  .sidebar-link {
+    justify-content: center;
+    height: 100%;
+    padding: 0;
+  }
+  
+  .sidebar-link::before {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 3px;
+  }
+  
+  .app-layout {
+    padding-left: 0;
+    padding-bottom: 60px;
+  }
+}
