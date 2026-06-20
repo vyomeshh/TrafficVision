@@ -136,16 +136,7 @@ export default function UploadPanel({ onUpload, isProcessing, processingLogs, de
                 </button>
               </div>
 
-              {/* Terminal Console */}
-              {processingLogs.length > 0 && (
-                <div className="terminal-console" ref={terminalRef} style={{ marginTop: '15px', flexGrow: 1 }}>
-                  {processingLogs.map((log, i) => (
-                    <div key={i} className={`terminal-line ${log.includes('[ERROR]') ? 'error' : ''}`}>
-                      {log}
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Removed Terminal Console */}
             </div>
 
             {/* BACK FACE: Detection Results */}

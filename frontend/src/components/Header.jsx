@@ -26,10 +26,7 @@ export default function Header({ serverOnline }) {
       </div>
 
       <div className="header-controls">
-        <div className={`status-badge ${serverOnline ? 'online' : 'offline'}`}>
-          <span className="status-dot" />
-          {serverOnline ? 'API ONLINE' : 'API OFFLINE'}
-        </div>
+
         <div className="header-time">{time}</div>
       </div>
     </header>
