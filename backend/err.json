@@ -1,1 +1,0 @@
-{"detail":{"success":false,"detection_id":"TR-2026-DE8B9E","error":"'numpy.ndarray' object has no attribute 'flush'","processing_logs":["[12:45:05.480] Reading uploaded file…","[12:45:05.480] Saved upload → TR-2026-DE8B9E.jpg","[12:45:05.480] Pre-processing image…","[12:45:05.481] ERROR: 'numpy.ndarray' object has no attribute 'flush'"],"processing_time_ms":1.01}}
