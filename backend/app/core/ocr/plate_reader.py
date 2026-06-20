@@ -415,10 +415,11 @@ class PlateReader:
                 'is_valid': is_valid,
             })
 
+        valid_results = [r for r in results if r['is_valid']]
         logger.info(
-            "PlateReader.process: pipeline complete – %d result(s), "
+            "PlateReader.process: pipeline complete – %d raw result(s), "
             "%d valid plate(s).",
             len(results),
-            sum(1 for r in results if r['is_valid']),
+            len(valid_results),
         )
-        return results
+        return valid_results
