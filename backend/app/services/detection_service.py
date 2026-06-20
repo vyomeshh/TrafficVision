@@ -66,15 +66,15 @@ async def process_detection(detection_id: str, contents: bytes, filename: str) -
     # 3. YOLOv8 Vehicle Detection
     log_service.add_log(detection_id, "Running YOLOv8 vehicle detection...")
     detections, detection_img = detect_vehicles(
-        processed_img,
-        confidence=YOLO_CONFIDENCE,
+        original_img,
+        confidence=0.20,  # Lowered to catch heavily occluded riders
     )
     vehicles_detected = len([d for d in detections if d.get("class_name") != "Person"])
     log_service.add_log(detection_id, f"Detected {vehicles_detected} vehicle(s).")
 
     # 4. Violation checks
     log_service.add_log(detection_id, "Checking for helmet violations...")
-    helmet_violations, hl = check_helmet_violation(detections, processed_img)
+    helmet_violations, hl = check_helmet_violation(detections, original_img)
     log_service.add_raw_logs(detection_id, hl)
 
     log_service.add_log(detection_id, "Checking for triple riding...")
@@ -84,7 +84,7 @@ async def process_detection(detection_id: str, contents: bytes, filename: str) -
     log_service.add_log(detection_id, "Checking for red-light violations...")
     red_light_violations, rl = check_red_light_violation(
         detections,
-        processed_img.shape,
+        original_img.shape,
         stop_line_y_ratio=STOP_LINE_RATIO,
     )
     log_service.add_raw_logs(detection_id, rl)
@@ -105,7 +105,7 @@ async def process_detection(detection_id: str, contents: bytes, filename: str) -
     # 6. Annotate image
     log_service.add_log(detection_id, "Annotating image with results...")
     annotated_img = annotate_image(
-        processed_img,
+        original_img,
         detections,
         violations=all_violations,
         plates=plates,
