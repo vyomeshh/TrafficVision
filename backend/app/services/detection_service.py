@@ -13,6 +13,9 @@ from app.services.fallback_service import (
     check_helmet_violation,
     check_triple_riding,
     check_red_light_violation,
+    check_seatbelt_compliance,
+    check_wrong_side_driving,
+    check_illegal_parking,
     PlateReader,
     store_violation
 )
@@ -89,12 +92,25 @@ async def process_detection(detection_id: str, contents: bytes, filename: str) -
     )
     log_service.add_raw_logs(detection_id, rl)
 
-    all_violations = helmet_violations + triple_violations + red_light_violations
+    log_service.add_log(detection_id, "Checking for seatbelt compliance...")
+    seatbelt_violations, sb = check_seatbelt_compliance(detections, original_img)
+    log_service.add_raw_logs(detection_id, sb)
+
+    log_service.add_log(detection_id, "Checking for wrong-side driving...")
+    wrong_side_violations, ws = check_wrong_side_driving(detections, original_img.shape[1])
+    log_service.add_raw_logs(detection_id, ws)
+
+    log_service.add_log(detection_id, "Checking for illegal parking...")
+    parking_violations, pk = check_illegal_parking(detections, original_img.shape)
+    log_service.add_raw_logs(detection_id, pk)
+
+    all_violations = helmet_violations + triple_violations + red_light_violations + seatbelt_violations + wrong_side_violations + parking_violations
     log_service.add_log(
         detection_id,
         f"Found {len(all_violations)} violation(s) "
         f"(helmet={len(helmet_violations)}, triple={len(triple_violations)}, "
-        f"red_light={len(red_light_violations)})."
+        f"red_light={len(red_light_violations)}, seatbelt={len(seatbelt_violations)}, "
+        f"wrong_side={len(wrong_side_violations)}, parking={len(parking_violations)})."
     )
 
     # 5. Plate recognition

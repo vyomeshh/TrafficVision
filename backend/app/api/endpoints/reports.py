@@ -11,13 +11,18 @@ router = APIRouter()
 @router.get("/{report_type}")
 async def export_report(report_type: str):
     """Generate and return a CSV report."""
-    if report_type != "daily":
+    if report_type not in ["daily", "weekly", "monthly"]:
         raise HTTPException(status_code=400, detail="Unsupported report type")
 
     try:
-        # Last 30 days
         end_date = datetime.utcnow()
-        start_date = end_date - timedelta(days=30)
+        if report_type == "weekly":
+            start_date = end_date - timedelta(days=7)
+        elif report_type == "monthly":
+            start_date = end_date - timedelta(days=30)
+        else: # daily (just today, or last 24h)
+            start_date = end_date - timedelta(days=1)
+            
         data = await get_report(start_date, end_date)
 
         # Generate CSV in memory

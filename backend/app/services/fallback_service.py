@@ -29,6 +29,18 @@ class FallbackModels:
     def check_red_light_violation(detections, image_shape, **kw):
         return [], []
 
+    @staticmethod
+    def check_seatbelt_compliance(detections, img, **kw):
+        return [], []
+
+    @staticmethod
+    def check_wrong_side_driving(detections, img_width, **kw):
+        return [], []
+
+    @staticmethod
+    def check_illegal_parking(detections, img_shape, **kw):
+        return [], []
+
     class PlateReaderFallback:
         def process(self, img, detections, **kw):
             return []
@@ -40,6 +52,9 @@ try:
     from app.core.rules.helmet_check import check_helmet_violation
     from app.core.rules.triple_riding import check_triple_riding
     from app.core.rules.red_light import check_red_light_violation
+    from app.core.rules.seatbelt import check_seatbelt_compliance
+    from app.core.rules.wrong_side import check_wrong_side_driving
+    from app.core.rules.illegal_parking import check_illegal_parking
     from app.core.ocr.plate_reader import PlateReader
     _models_available = True
 except ImportError as exc:
@@ -52,6 +67,9 @@ except ImportError as exc:
     check_helmet_violation = FallbackModels.check_helmet_violation
     check_triple_riding = FallbackModels.check_triple_riding
     check_red_light_violation = FallbackModels.check_red_light_violation
+    check_seatbelt_compliance = FallbackModels.check_seatbelt_compliance
+    check_wrong_side_driving = FallbackModels.check_wrong_side_driving
+    check_illegal_parking = FallbackModels.check_illegal_parking
     PlateReader = FallbackModels.PlateReaderFallback
 
 _db_available = False
@@ -107,4 +125,38 @@ except ImportError as exc:
         }
     
     async def get_report(start_date=None, end_date=None):
-        return []
+        # Generate some mock daily data for the CSV if in-memory is empty, 
+        # or aggregate the in-memory violations
+        from datetime import datetime, timedelta
+        if not _in_memory_violations:
+            return [{
+                "date": datetime.utcnow().strftime('%Y-%m-%d'),
+                "total": 0,
+                "helmet_violations": 0,
+                "triple_riding_violations": 0,
+                "red_light_violations": 0,
+            }]
+            
+        # Very simple aggregation by date for in-memory
+        report_map = {}
+        for v in _in_memory_violations:
+            ts_str = v.get("timestamp", datetime.utcnow().isoformat())
+            try:
+                dt = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                d_str = dt.strftime('%Y-%m-%d')
+            except ValueError:
+                d_str = datetime.utcnow().strftime('%Y-%m-%d')
+                
+            if d_str not in report_map:
+                report_map[d_str] = {"date": d_str, "total": 0, "helmet_violations": 0, "triple_riding_violations": 0, "red_light_violations": 0}
+                
+            report_map[d_str]["total"] += 1
+            vt = v.get("violation_type")
+            if vt == "No Helmet":
+                report_map[d_str]["helmet_violations"] += 1
+            elif vt == "Triple Riding":
+                report_map[d_str]["triple_riding_violations"] += 1
+            elif vt == "Red Light Violation":
+                report_map[d_str]["red_light_violations"] += 1
+                
+        return list(report_map.values())
