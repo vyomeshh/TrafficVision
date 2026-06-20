@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
-from app.services.fallback_service import get_report
+from app.services.fallback_service import get_violations
 
 router = APIRouter()
 
@@ -15,32 +15,42 @@ async def export_report(report_type: str):
         raise HTTPException(status_code=400, detail="Unsupported report type")
 
     try:
-        end_date = datetime.utcnow()
         if report_type == "weekly":
-            start_date = end_date - timedelta(days=7)
+            limit = 1000
         elif report_type == "monthly":
-            start_date = end_date - timedelta(days=30)
-        else: # daily (just today, or last 24h)
-            start_date = end_date - timedelta(days=1)
+            limit = 5000
+        else: # daily
+            limit = 200
             
-        data = await get_report(start_date, end_date)
+        import asyncio
+        if asyncio.iscoroutinefunction(get_violations):
+            data = await get_violations(limit=limit)
+        else:
+            data = get_violations(limit=limit)
+            
+        # fallback_service returns {"violations": [...]}, models returns a list
+        if isinstance(data, dict):
+            violations = data.get("violations", [])
+        else:
+            violations = data
 
         # Generate CSV in memory
         output = io.StringIO()
         writer = csv.writer(output)
-        writer.writerow(["Date", "Total Violations", "Helmet", "Triple Riding", "Red Light"])
+        writer.writerow(["Detection ID", "Date", "Vehicle Type", "Violation Type", "License Plate", "Confidence"])
 
-        for row in data:
+        for v in violations:
             writer.writerow([
-                row.get("date", ""),
-                row.get("total", 0),
-                row.get("helmet_violations", 0),
-                row.get("triple_riding_violations", 0),
-                row.get("red_light_violations", 0),
+                v.get("detection_id", ""),
+                v.get("timestamp", ""),
+                v.get("vehicle_type", ""),
+                v.get("violation_type", ""),
+                v.get("license_plate", ""),
+                v.get("confidence", 0.0),
             ])
 
         output.seek(0)
-        filename = f"traffic_violations_{end_date.strftime('%Y%m%d')}.csv"
+        filename = f"traffic_violations_{report_type}_{datetime.utcnow().strftime('%Y%m%d')}.csv"
         
         return StreamingResponse(
             iter([output.getvalue()]),
