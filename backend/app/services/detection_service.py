@@ -131,9 +131,13 @@ async def process_detection(detection_id: str, contents: bytes, filename: str) -
             ),
             "bbox": v.get("bbox"),
             "timestamp": datetime.utcnow().isoformat(),
-            "image_path": str(annotated_path),
+            "image_path": annotated_path.name,
         }
-        await store_violation(violation_record)
+        import asyncio
+        if asyncio.iscoroutinefunction(store_violation):
+            await store_violation(violation_record)
+        else:
+            store_violation(violation_record)
     log_service.add_log(detection_id, "Violations persisted to database.")
 
     # 9. Build response

@@ -14,14 +14,28 @@ async def list_violations(
     offset: int = Query(0, ge=0, description="Offset for pagination"),
 ):
     """Return a paginated list of detected violations with optional filters."""
+    import asyncio
     try:
-        data = await get_violations(
-            vehicle_type=vehicle_type,
-            violation_type=violation_type,
-            search=search,
-            limit=limit,
-            offset=offset,
-        )
+        if asyncio.iscoroutinefunction(get_violations):
+            data = await get_violations(
+                vehicle_type=vehicle_type,
+                violation_type=violation_type,
+                search=search,
+                limit=limit,
+                offset=offset,
+            )
+        else:
+            filters = {}
+            if vehicle_type: filters["vehicle_type"] = vehicle_type
+            if violation_type: filters["violation_type"] = violation_type
+            if search: filters["plate_search"] = search
+            db_data = get_violations(
+                filters=filters,
+                limit=limit,
+                offset=offset,
+            )
+            # Make response match fallback dict structure
+            data = {"violations": db_data, "total": len(db_data)}
         return {"success": True, "data": data}
     except Exception as exc:
         raise HTTPException(

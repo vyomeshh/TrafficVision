@@ -24,10 +24,19 @@ RESULTS_DIR = DATA_DIR / "results"
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    print("[STARTUP] TrafficVision AI server ready.")
+    yield
+
 app = FastAPI(
     title="TrafficVision AI",
     description="API for detecting traffic violations and reading license plates",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 # ---------------------------------------------------------------------------
@@ -52,11 +61,3 @@ app.mount("/static/results", StaticFiles(directory=str(RESULTS_DIR)), name="resu
 # Include API Routers
 # ---------------------------------------------------------------------------
 app.include_router(api_router, prefix="/api")
-
-# ---------------------------------------------------------------------------
-# App Events
-# ---------------------------------------------------------------------------
-@app.on_event("startup")
-async def startup_event():
-    init_db()
-    print("[STARTUP] TrafficVision AI server ready.")

@@ -40,13 +40,13 @@ class PlateReader:
     def __init__(self):
         """Initialise PaddleOCR with English language and angle classification."""
         if PADDLEOCR_AVAILABLE:
-            logger.info("Initialising PaddleOCR engine (lang=en, angle_cls=True)…")
-            self.ocr = PaddleOCR(
-                lang='en',
-                use_angle_cls=True,
-                show_log=False,          # suppress PaddleOCR internal logs
-            )
-            logger.info("PaddleOCR engine ready.")
+            logger.info("Initialising PaddleOCR engine…")
+            try:
+                self.ocr = PaddleOCR(lang='en')
+                logger.info("PaddleOCR engine ready.")
+            except Exception as exc:
+                logger.warning(f"PaddleOCR init failed: {exc}. OCR disabled.")
+                self.ocr = None
         else:
             logger.warning(
                 "PaddleOCR is not installed. PlateReader will return empty "

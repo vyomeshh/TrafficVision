@@ -65,30 +65,15 @@ function App() {
     const formData = new FormData();
     formData.append('image', file);
 
-    // Add simulated streaming logs
-    const logMessages = [
-      '[SYSTEM] Initiating TrafficVision AI Core...',
-      '[IMAGE] Reading uploaded feed...',
-      '[PREPROCESS] Applying CLAHE low-light enhancement...',
-      '[PREPROCESS] Running Gaussian denoising filter...',
-      '[PREPROCESS] Correcting motion blur artifacts...',
-      '[MODEL] Loading YOLOv8s inference engine...',
-      '[YOLO] Running object detection (conf > 0.25)...',
-    ];
 
-    for (let i = 0; i < logMessages.length; i++) {
-      await new Promise(r => setTimeout(r, 400));
-      setProcessingLogs(prev => [...prev, logMessages[i]]);
-    }
 
     try {
       const data = await detectImage(formData);
 
-      // Continue logs with real results
+      // Add real results logs immediately
       const resultLogs = data.processing_logs || [];
-      for (let i = 0; i < resultLogs.length; i++) {
-        await new Promise(r => setTimeout(r, 200));
-        setProcessingLogs(prev => [...prev, resultLogs[i]]);
+      if (resultLogs.length > 0) {
+        setProcessingLogs(prev => [...prev, ...resultLogs]);
       }
 
       setDetectionResult(data);

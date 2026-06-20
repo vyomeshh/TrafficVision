@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// If the backend runs on port 8001 because port 8000 is occupied
 const API_BASE = "http://localhost:8002/api";
 
 const api = axios.create({
